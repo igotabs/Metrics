@@ -89,7 +89,6 @@ namespace Metrics.Pages
             return words;
         }
 
-
         private static bool IsValid(String str)
         {
             return str.Any(x => char.IsLetter(x));
@@ -101,7 +100,6 @@ namespace Metrics.Pages
             foundIndexes.Add(0);
             for (int i = s.IndexOf(type); i > -1; i = s.IndexOf(type, i + 1))
             {
-                // for loop end when i=-1 ('a' not found)
                 foundIndexes.Add(i);
             }
 
@@ -110,15 +108,7 @@ namespace Metrics.Pages
 
         public static char[] GetMostFrequentChar(string str)
         {
-
-
-           // str = new string(str.Where(c => (char.IsLetter(c))).ToArray());
-
-
-            Dictionary<char, int> result =
-
-                //new string(str.Where(c => (char.IsLetter(c))).ToArray())
-                str.GroupBy(x => x).ToDictionary(x => x.Key, x => x.Count());
+            Dictionary<char, int> result = str.GroupBy(x => x).ToDictionary(x => x.Key, x => x.Count());
             return result.Where(x => x.Value == result.Values.Max()).Select(x => x.Key).ToArray();
         }
     }
