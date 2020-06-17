@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -25,35 +26,37 @@ namespace Metrics.Pages
 
         public void OnPost(string text)
         {
+            StringBuilder messageBuilder = new StringBuilder();
             if (string.IsNullOrEmpty(text))
             {
-                Message = "There is empty text. Repeat enter a text";
+                messageBuilder.Append("There is empty text. Repeat enter a text");
                 return;
             }
 
-            Message += "Text:"+ System.Environment.NewLine + text;
-            Message += System.Environment.NewLine;
-            Message += System.Environment.NewLine;
-            Message += "Result:";
-            Message += System.Environment.NewLine;
+            messageBuilder.Append("Text:" + System.Environment.NewLine + text);
+            messageBuilder.Append(System.Environment.NewLine);
+            messageBuilder.Append(System.Environment.NewLine);
+            messageBuilder.Append("Result:");
+            messageBuilder.Append(System.Environment.NewLine);
             var s = GetMostFrequentChar(text);
-            string frequentChars = string.Join(",", s);
+            string frequentChars = string.Join(System.Environment.NewLine, s);
             if (frequentChars.EndsWith(",,"))
                 frequentChars = frequentChars.Substring(0, frequentChars.Length-1);
             frequentChars = frequentChars.Replace(" ", "<whiteSpace>");
-            Message += "Most frequent characters: " + frequentChars;
-            Message += System.Environment.NewLine;
+            messageBuilder.Append(("Most frequent characters are (each on new line): " + System.Environment.NewLine + frequentChars));
+            messageBuilder.Append(System.Environment.NewLine);
 
-            Message += "Number of exclamatory sentences: " + NumberOfTypedSentence(text,'!');
-            Message += System.Environment.NewLine;
+            messageBuilder.Append("Number of exclamatory sentences: " + NumberOfTypedSentence(text,'!'));
+            messageBuilder.Append(System.Environment.NewLine);
 
-            Message += "Percent of nouns: " + (CountNounWords(text)/ GetWords(text).Count)*100+"%";
-            Message += System.Environment.NewLine;
+            messageBuilder.Append("Percent of nouns: " + (CountNounWords(text)/ GetWords(text).Count)*100+"%");
+            messageBuilder.Append(System.Environment.NewLine);
 
-            Message += "Number of words: " + GetWords(text).Count;
-            Message += System.Environment.NewLine;
+            messageBuilder.Append("Number of words: " + GetWords(text).Count);
+            messageBuilder.Append(System.Environment.NewLine);
 
-            Message += "Number of sentences: " + (NumberOfTypedSentence(text, '.')+ NumberOfTypedSentence(text, '?')+ NumberOfTypedSentence(text, '!'));
+            messageBuilder.Append("Number of sentences: " + (NumberOfTypedSentence(text, '.')+ NumberOfTypedSentence(text, '?')+ NumberOfTypedSentence(text, '!')));
+            Message = messageBuilder.ToString();
         }
 
         private float NumberOfTypedSentence(string text, char type)
@@ -91,7 +94,7 @@ namespace Metrics.Pages
 
         private static bool IsValid(String str)
         {
-            return str.Any(x => char.IsLetter(x));
+            return str.Any(char.IsLetter);
         }
 
         private static List<int> IndexesChar(string s, char type)
