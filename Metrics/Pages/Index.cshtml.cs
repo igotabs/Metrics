@@ -40,6 +40,7 @@ namespace Metrics.Pages
             string frequentChars = string.Join(",", s);
             if (frequentChars.EndsWith(",,"))
                 frequentChars = frequentChars.Substring(0, frequentChars.Length-1);
+            frequentChars = frequentChars.Replace(" ", "<whiteSpace>");
             Message += "Most frequent characters: " + frequentChars;
             Message += System.Environment.NewLine;
 
