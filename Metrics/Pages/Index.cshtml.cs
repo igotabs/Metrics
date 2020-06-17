@@ -37,8 +37,10 @@ namespace Metrics.Pages
             Message += "Result:";
             Message += System.Environment.NewLine;
             var s = GetMostFrequentChar(text);
-
-            Message += "Most frequent characters: " + string.Join(",", s).TrimEnd(',');
+            string frequentChars = string.Join(",", s);
+            if (frequentChars.EndsWith(",,"))
+                frequentChars = frequentChars.Substring(0, frequentChars.Length-1);
+            Message += "Most frequent characters: " + frequentChars;
             Message += System.Environment.NewLine;
 
             Message += "Number of exclamatory sentences: " + NumberOfTypedSentence(text,'!');
@@ -75,7 +77,6 @@ namespace Metrics.Pages
                if(Dictionary.Nouns.Any(a => a.Equals(word)))count++;
            }
 
-
            return count;
         }
 
@@ -90,8 +91,7 @@ namespace Metrics.Pages
 
         private static bool IsValid(String str)
         {
-          //  return Regex.IsMatch(str, @"^[a-zA-Z]+$");
-          return str.Any(x => char.IsLetter(x));
+            return str.Any(x => char.IsLetter(x));
         }
 
         private static List<int> IndexesChar(string s, char type)
@@ -109,7 +109,15 @@ namespace Metrics.Pages
 
         public static char[] GetMostFrequentChar(string str)
         {
-            Dictionary<char, int> result = str.GroupBy(x => x).ToDictionary(x => x.Key, x => x.Count());
+
+
+           // str = new string(str.Where(c => (char.IsLetter(c))).ToArray());
+
+
+            Dictionary<char, int> result =
+
+                //new string(str.Where(c => (char.IsLetter(c))).ToArray())
+                str.GroupBy(x => x).ToDictionary(x => x.Key, x => x.Count());
             return result.Where(x => x.Value == result.Values.Max()).Select(x => x.Key).ToArray();
         }
     }
