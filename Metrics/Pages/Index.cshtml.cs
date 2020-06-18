@@ -38,7 +38,7 @@ namespace Metrics.Pages
             messageBuilder.Append(System.Environment.NewLine);
             messageBuilder.Append("Result:");
             messageBuilder.Append(System.Environment.NewLine);
-            var s = GetMostFrequentChar(text);
+            var s = new MostFreqMetric().GetMostFrequentChar(text);
             string frequentChars = string.Join(System.Environment.NewLine, s);
             if (frequentChars.EndsWith(",,"))
                 frequentChars = frequentChars.Substring(0, frequentChars.Length-1);
@@ -46,16 +46,16 @@ namespace Metrics.Pages
             messageBuilder.Append(("Most frequent characters are (each on new line): " + System.Environment.NewLine + frequentChars));
             messageBuilder.Append(System.Environment.NewLine);
 
-            messageBuilder.Append("Number of exclamatory sentences: " + NumberOfTypedSentence(text,'!'));
+            messageBuilder.Append("Number of exclamatory sentences: " + new SpecialMetric("exclamatory sentences").count(text));
             messageBuilder.Append(System.Environment.NewLine);
 
-            messageBuilder.Append("Percent of nouns: " + (CountNounWords(text)/ GetWords(text).Count)*100+"%");
+            messageBuilder.Append("Percent of nouns: " + new SpecialDictionaryMetric().dense(text)*100+"%");
             messageBuilder.Append(System.Environment.NewLine);
 
-            messageBuilder.Append("Number of words: " + GetWords(text).Count);
+            messageBuilder.Append("Number of words: " + new EntityMetric("word").count(text));
             messageBuilder.Append(System.Environment.NewLine);
 
-            messageBuilder.Append("Number of sentences: " + (NumberOfTypedSentence(text, '.')+ NumberOfTypedSentence(text, '?')+ NumberOfTypedSentence(text, '!')));
+            messageBuilder.Append("Number of sentences: " + new EntityMetric("sentense").count(text));
             Message = messageBuilder.ToString();
         }
 
